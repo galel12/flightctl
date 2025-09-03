@@ -6,6 +6,7 @@ on:
     branches:
       - main
       - 'release-*'
+      - release-0.9-edm-2064-test  # Temporary: EDM-2064 CI testing
     tags:
       - '*'
 
