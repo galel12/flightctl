@@ -31,6 +31,13 @@ func IsInternalRequest(ctx context.Context) bool {
 	return false
 }
 
+func IsAgentRequest(ctx context.Context) bool {
+	if agent, ok := ctx.Value(consts.AgentCtxKey).(string); ok && agent == "true" {
+		return true
+	}
+	return false
+}
+
 func NilOutManagedObjectMetaProperties(om *api.ObjectMeta) {
 	if om == nil {
 		return

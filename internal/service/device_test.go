@@ -389,7 +389,7 @@ func TestDeviceReplaceStatusLastSeen(t *testing.T) {
 	require.NoError(err)
 
 	// Test different contexts
-	agentCtx := context.Background()                                                           // Agent request (should update LastSeen)
+	agentCtx := context.WithValue(context.Background(), consts.AgentCtxKey, "true")            // Agent request (should update LastSeen)
 	userCtx := context.Background()                                                            // User request (should NOT update LastSeen)
 	internalCtx := context.WithValue(context.Background(), consts.InternalRequestCtxKey, true) // Internal (should NOT update)
 
@@ -399,17 +399,17 @@ func TestDeviceReplaceStatusLastSeen(t *testing.T) {
 	require.Equal(int32(200), status.Code)
 	require.False(result.Status.LastSeen.IsZero()) // Should be updated
 
-	// Test 2: User request should NOT update LastSeen (THIS WILL FAIL - showing the bug)
-	deviceUpdate.Status.LastSeen = time.Time{} // Reset to zero
+	// Test 2: User request should NOT auto-update LastSeen - uses sent value
+	deviceUpdate.Status.LastSeen = time.Time{} // User sends zero time
 	result, status = serviceHandler.ReplaceDeviceStatus(userCtx, deviceName, deviceUpdate)
 	require.Equal(int32(200), status.Code)
-	require.True(result.Status.LastSeen.IsZero()) // Should remain zero (will FAIL)
+	require.True(result.Status.LastSeen.IsZero()) // Should use the zero time sent by user
 
-	// Test 3: Internal request should NOT update LastSeen
-	deviceUpdate.Status.LastSeen = time.Time{} // Reset to zero
+	// Test 3: Internal request should NOT auto-update LastSeen - uses sent value  
+	deviceUpdate.Status.LastSeen = time.Time{} // Internal sends zero time
 	result, status = serviceHandler.ReplaceDeviceStatus(internalCtx, deviceName, deviceUpdate)
 	require.Equal(int32(200), status.Code)
-	require.True(result.Status.LastSeen.IsZero()) // Should remain zero
+	require.True(result.Status.LastSeen.IsZero()) // Should use the zero time sent by internal
 }
 
 func TestDeviceDisconnected(t *testing.T) {

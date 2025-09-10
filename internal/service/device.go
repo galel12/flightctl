@@ -250,8 +250,7 @@ func (h *ServiceHandler) ReplaceDeviceStatus(ctx context.Context, name string, i
 	if name != *incomingDevice.Metadata.Name {
 		return nil, api.StatusBadRequest("resource name specified in metadata does not match name in path")
 	}
-	isNotInternal := !IsInternalRequest(ctx)
-	if isNotInternal {
+	if IsAgentRequest(ctx) {
 		incomingDevice.Status.LastSeen = time.Now()
 	}
 
@@ -314,6 +313,10 @@ func (h *ServiceHandler) PatchDeviceStatus(ctx context.Context, name string, pat
 	}
 	if !reflect.DeepEqual(currentObj.Spec, newObj.Spec) {
 		return nil, api.StatusBadRequest("spec is immutable")
+	}
+
+	if IsAgentRequest(ctx) {
+		newObj.Status.LastSeen = time.Now()
 	}
 
 	NilOutManagedObjectMetaProperties(&newObj.Metadata)
