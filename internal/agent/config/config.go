@@ -407,9 +407,6 @@ func mergeConfigs(base, override *Config) {
 
 	// audit
 	overrideIfNotEmpty(&base.Audit.Enabled, override.Audit.Enabled)
-	overrideIfNotEmpty(&base.Audit.MaxSize, override.Audit.MaxSize)
-	overrideIfNotEmpty(&base.Audit.MaxBackups, override.Audit.MaxBackups)
-	overrideIfNotEmpty(&base.Audit.MaxAge, override.Audit.MaxAge)
 
 	for k, v := range override.DefaultLabels {
 		base.DefaultLabels[k] = v
