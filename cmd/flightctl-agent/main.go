@@ -148,10 +148,9 @@ func (s *systemInfoCmd) Execute() error {
 }
 
 type healthCmd struct {
-	timeout       time.Duration
-	serverURL     string
-	verbose       bool
-	greenbootMode bool
+	timeout   time.Duration
+	serverURL string
+	verbose   bool
 }
 
 // NewHealthCommand creates a new health check command.
@@ -162,7 +161,6 @@ func NewHealthCommand() *healthCmd {
 	fs.DurationVar(&cmd.timeout, "timeout", 30*time.Second, "Maximum time to wait for checks.")
 	fs.StringVar(&cmd.serverURL, "server", "", "Management server URL for connectivity check.")
 	fs.BoolVar(&cmd.verbose, "verbose", false, "Print detailed check results.")
-	fs.BoolVar(&cmd.greenbootMode, "greenboot", false, "Run in greenboot integration mode.")
 
 	if hasHelpFlag(os.Args[2:]) {
 		fmt.Println("Usage of health:")
@@ -197,7 +195,6 @@ func (h *healthCmd) Execute() error {
 		health.WithTimeout(h.timeout),
 		health.WithServerURL(h.serverURL),
 		health.WithVerbose(h.verbose),
-		health.WithGreenbootMode(h.greenbootMode),
 		health.WithOutput(os.Stdout),
 	)
 	return checker.Run(context.Background())
