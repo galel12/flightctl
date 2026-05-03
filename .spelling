@@ -341,6 +341,18 @@ multicluster
  repos
  RHSM
  volumeMount
+ Syft
+ CycloneDX
+ PURL
+ PURLs
+ referrer
+ imageBuilderWorker
+ GeneratingSBOM
+ vulnerabilityReporting
+ SBOM
+ Trustify
+ distro
+ README
  - docs/user/references/api-resources.md
 CertificateSigningRequest
 AuthConfig
@@ -611,7 +623,13 @@ ImageExport
 OCI
 ReadWrite
 ImageBuilder
- - docs/user/references/agent-architecture.md
+Syft
+CycloneDX
+PURL
+PURLs
+SBOM
+Trustify
+- docs/user/references/agent-architecture.md
 MCD-like
 jumphost-less
  - docs/user/using/greenboot.md
